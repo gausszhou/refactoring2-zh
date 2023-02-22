@@ -4,21 +4,19 @@
 set -e
 
 # build
-yarn docs:build
+yarn build
 
 # navigate into the build output directory
-cd docs/.vuepress/dist
+cd dist
 
-# if you are deploying to a custom domain
-echo 'http://gdut_yy.gitee.io/doc-refact2/' > CNAME
 
 git init
+git checkout -b gh-pages
 git add -A
 git commit -m 'deploy'
 
 # if you are deploying to https://<USERNAME>.github.io
-git push -f git@gitee.com:gdut_yy/doc-refact2.git master
-
+git push -f git@github.com:gausszhou/refactoring2-zh.git gh-pages
 # if you are deploying to https://<USERNAME>.github.io/<REPO>
 # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
 

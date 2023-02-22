@@ -1,6 +1,13 @@
 {
   "scripts": {
-    "docs:dev": "vuepress dev docs --open --host 127.0.0.1",
-    "docs:build": "vuepress build docs"
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs"
+  },
+  "devDependencies": {
+    "vuepress": "^1.9.8",
+    "vuepress-plugin-juejin-style-copy": "^1.0.4"
+  },
+  "dependencies": {
+    "vuepress-theme-gauss": "^1.0.0"
   }
 }

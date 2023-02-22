@@ -1,11 +1,13 @@
 // .vuepress/config.js
 module.exports = {
-  title: "《重构 改善既有代码的设计第二版》中文翻译",
-  base: "/doc-refact2/",
+  theme: "vuepress-theme-gauss",
+  title: "《重构 改善既有代码的设计》",
+  base: "/refactoring2-zh/",
+  dest: "dist",
   themeConfig: {
-    repo: "gdut-yy/Refactoring2-zh",
+    repo: "gausszhou/refactoring2-zh",
     repoLabel: "Github",
-    docsRepo: "gdut-yy/Refactoring2-zh",
+    docsRepo: "gausszhou/refactoring2-zh",
     docsBranch: "master/docs",
     editLinks: true,
     editLinkText: "帮助我们改善此页面！",
