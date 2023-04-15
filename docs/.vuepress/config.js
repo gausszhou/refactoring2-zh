@@ -1,6 +1,6 @@
 // .vuepress/config.js
 module.exports = {
-  theme: "vuepress-theme-gauss",
+  theme: "@gausszhou/vuepress-theme-gauss",
   title: "《重构 改善既有代码的设计》",
   base: "/refactoring2-zh/",
   dest: "dist",

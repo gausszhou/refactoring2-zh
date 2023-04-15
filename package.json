@@ -8,6 +8,6 @@
     "vuepress-plugin-juejin-style-copy": "^1.0.4"
   },
   "dependencies": {
-    "vuepress-theme-gauss": "^1.0.0"
+    "@gausszhou/vuepress-theme-gauss": "^1.0.2"
   }
 }

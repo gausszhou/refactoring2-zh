@@ -1,3 +1,5 @@
 node_modules/
 docs/.vuepress/dist/
 dist
+pnpm-lock.yaml
+package-lock.json
