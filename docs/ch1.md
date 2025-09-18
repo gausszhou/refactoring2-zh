@@ -103,7 +103,7 @@ function statement (invoice, plays) {
 
 用上面的数据文件（invoices.json 和 plays.json）作为测试输入，运行这段代码，会得到如下输出：
 
-```
+```bash
 Statement for BigCo
   Hamlet: $650.00 (55 seats)
   As You Like It: $580.00 (35 seats)
