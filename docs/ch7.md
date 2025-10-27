@@ -225,6 +225,7 @@ usages: {
 name: "neal",
 id: "38673",
 // more customers in a similar form
+}
 ```
 
 对嵌套数据的更新和读取可以进到更深的层级。
@@ -424,12 +425,13 @@ function compareUsage(customerID, laterYear, month) {
 class Person {
   get courses() {return this._courses;}
   set courses(aList) {this._courses = aList;}
-
+}
 
 class Person {
   get courses() {return this._courses.slice();}
   addCourse(aCourse) { ... }
   removeCourse(aCourse) { ... }
+}
 ```
 
 ### 动机
@@ -613,9 +615,10 @@ get courses() {return this._courses.slice();}
 #### class Order...
 
 ```js
-  constructor(data) {
+constructor(data) {
   this.priority = data.priority;
   // more initialization
+}
 ```
 
 客户端代码有些地方是这么用它的：
@@ -802,7 +805,7 @@ else
 #### class Order...
 
 ```js
-    constructor(quantity, item) {
+  constructor(quantity, item) {
     this._quantity = quantity;
     this._item = item;
   }
@@ -813,7 +816,6 @@ get price() {
     if (basePrice &gt; 1000) discountFactor -= 0.03;
     return basePrice * discountFactor;
   }
-}
 ```
 
 我希望把 basePrice 和 discountFactor 两个临时变量变成函数。
@@ -823,7 +825,7 @@ get price() {
 #### class Order...
 
 ```js
-   constructor(quantity, item) {
+ constructor(quantity, item) {
   this._quantity = quantity;
   this._item = item;
  }
@@ -834,7 +836,6 @@ get price() {
   if (basePrice &gt; 1000) discountFactor -= 0.03;
   return basePrice * discountFactor;
  }
-}
 ```
 
 然后我把赋值操作的右边提炼成一个取值函数。
@@ -899,12 +900,12 @@ get price() {
 反向重构：内联类（186）
 
 ```js
-  class Person {
+class Person {
  get officeAreaCode() {return this._officeAreaCode;}
  get officeNumber()   {return this._officeNumber;}
+}
 
-
-  class Person {
+class Person {
  get officeAreaCode() {return this._telephoneNumber.areaCode;}
  get officeNumber()   {return this._telephoneNumber.number;}
 }
@@ -1060,7 +1061,7 @@ get telephoneNumber() {return this._telephoneNumber.toString();}
 反向重构：提炼类（182）
 
 ```js
-  class Person {
+class Person {
  get officeAreaCode() {return this._telephoneNumber.areaCode;}
  get officeNumber()  {return this._telephoneNumber.number;}
 }
@@ -1069,10 +1070,10 @@ class TelephoneNumber {
  get number() {return this._number;}
 }
 
-
-  class Person {
+class Person {
  get officeAreaCode() {return this._officeAreaCode;}
  get officeNumber()  {return this._officeNumber;}
+}
 ```
 
 ### 动机
@@ -1200,6 +1201,7 @@ set trackingNumber(arg) {this._trackingNumber = arg;}
 
 class Person {
   get manager() {return this.department.manager;}
+}
 ```
 
 ### 动机
@@ -1279,9 +1281,11 @@ manager = aPerson.department.manager;
 
 class Person {
  get manager() {return this.department.manager;}
+}
+```
 
-
-  manager = aPerson.department.manager;
+``` js
+ manager = aPerson.department.manager;
 ```
 
 ### 动机

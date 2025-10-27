@@ -15,10 +15,11 @@
 ```js
 class Account {
 get overdraftCharge() {...}
-
+}
 
 class AccountType {
   get overdraftCharge() {...}
+}
 ```
 
 ### 动机
@@ -189,7 +190,7 @@ function radians(degrees) {
 
   function distance(p1,p2) { ... }
   function radians(degrees) { ... }
-
+ }
 }
 ```
 
@@ -214,7 +215,7 @@ function radians(degrees) {
 现在万事俱备，是时候端出主菜了——我要在原 calculateDistance 函数体内调用 top_calculateDistance 函数：
 
 ```js
-  function trackSummary(points) {
+function trackSummary(points) {
  const totalTime = calculateTime();
  const totalDistance = calculateDistance();
  const pace = totalTime / 60 / totalDistance ;
@@ -227,6 +228,7 @@ function radians(degrees) {
  function calculateDistance() {
   return top_calculateDistance(points);
  }
+}
 ```
 
 接下来最重要的事是要运行一遍测试，看看功能是否仍然完整，函数在其新家待得是否舒适。
@@ -397,11 +399,12 @@ class AccountType…
   class Customer {
   get plan() {return this._plan;}
   get discountRate() {return this._discountRate;}
-
+  }
 
   class Customer {
   get plan() {return this._plan;}
   get discountRate() {return this.plan.discountRate;}
+  }
 ```
 
 ### 动机

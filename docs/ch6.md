@@ -181,6 +181,7 @@ function printOwing(invoice) {
   console.log(`name: ${invoice.customer}`);
   console.log(`amount: ${outstanding}`);
   console.log(`due: ${invoice.dueDate.toLocaleDateString()}`);
+ }
 }
 ```
 
@@ -211,6 +212,7 @@ function printOwing(invoice) {
  console.log(`name: ${invoice.customer}`);
  console.log(`amount: ${outstanding}`);
  console.log(`due: ${invoice.dueDate.toLocaleDateString()}`);
+}
 ```
 
 就可以将“打印详细信息”这一部分提炼为带两个参数的函数：
@@ -1171,7 +1173,7 @@ export function setDefaultOwner(arg) {
 对于列表数据，我尤其常用这一招。如果我在取值函数中返回数据的一份副本，客户端可以随便修改它，但不会影响到共享的这份数据。但在使用副本的做法时，我必须格外小心：有些代码可能希望能修改共享的数据。若果真如此，我就只能依赖测试来发现问题了。另一种做法是阻止对数据的修改，比如通过封装记录（162）就能很好地实现这一效果。
 
 ```js
-  let defaultOwnerData = {firstName: "Martin", lastName: "Fowler"};
+let defaultOwnerData = {firstName: "Martin", lastName: "Fowler"};
 export function defaultOwner()       {return new Person(defaultOwnerData);}
 export function setDefaultOwner(arg) {defaultOwnerData = arg;}
 
@@ -1183,6 +1185,7 @@ class Person {
  get lastName() {return this._lastName;}
  get firstName() {return this._firstName;}
  // and so on for other properties
+}
 ```
 
 现在，如果客户端调用 defaultOwner 函数获得“默认拥有人”数据、再尝试对其属性（即 lastName 和 firstName）重新赋值，赋值不会产生任何效果。对于侦测或阻止修改数据结构内部的数据项，各种编程语言有不同的方式，所以我会根据当下使用的语言来选择具体的办法。

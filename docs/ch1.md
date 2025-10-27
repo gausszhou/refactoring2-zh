@@ -64,7 +64,7 @@ function statement (invoice, plays) {
   const format = new Intl.NumberFormat("en-US",
                         { style: "currency", currency: "USD",
                           minimumFractionDigits: 2 }).format;
-  for (let perf of invoice.performances) {
+    for (let perf of invoice.performances) {
     const play = plays[perf.playID];
     let thisAmount = 0;
 
@@ -257,6 +257,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${format(totalAmount/100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
+}
 ```
 
 做完这个改动后，我会马上编译并执行一遍测试，看看有无破坏了其他东西。无论每次重构多么简单，养成重构后即运行测试的习惯非常重要。犯错误是很容易的——至少我知道我是很容易犯错的。做完一次修改就运行测试，这样在我真的犯了错时，只需要考虑一个很小的改动范围，这使得查错与修复问题易如反掌。这就是重构过程的精髓所在：小步修改，每次修改后就运行测试。如果我改动了太多东西，犯错时就可能陷入麻烦的调试，并为此耗费大把时间。小步修改，以及它带来的频繁反馈，正是防止混乱的关键。
@@ -381,6 +382,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${format(totalAmount/100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
+}
 ```
 
 编译、测试、提交，然后使用内联变量（123）手法内联 play 变量。
@@ -411,6 +413,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${format(totalAmount/100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
+}
 ```
 
 编译、测试、提交。完成变量内联后，我可以对 amountFor 函数应用改变函数声明（124），移除 play 参数。我会分两步走。首先在 amountFor 函数内部使用新提炼的函数。
@@ -468,6 +471,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${format(totalAmount/100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
+}
 ```
 
 #### function statement...
@@ -528,6 +532,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${format(totalAmount/100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
+}
 ```
 
 提炼计算观众量积分的逻辑
@@ -558,6 +563,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${format(totalAmount/100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
+}
 ```
 
 这会儿我们就看到了移除 play 变量的好处，移除了一个局部作用域的变量，提炼观众量积分的计算逻辑又更简单一些。
@@ -596,6 +602,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${format(totalAmount/100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
+}
 ```
 
 我还顺便删除了多余（并且会引起误解）的注释。
@@ -640,6 +647,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${format(totalAmount/100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
+}
 ```
 
 正如我上面所指出的，临时变量往往会带来麻烦。它们只在对其进行处理的代码块中有用，因此临时变量实质上是鼓励你写长而复杂的函数。因此，下一步我要替换掉一些临时变量，而最简单的莫过于从 format 变量入手。这是典型的“将函数赋值给临时变量”的场景，我更愿意将其替换为一个明确声明的函数。
@@ -673,6 +681,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${format(totalAmount/100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
+}
 ```
 
 ::: tip
@@ -698,6 +707,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${usd(totalAmount)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
+}
 ```
 
 #### function statement...
@@ -738,9 +748,10 @@ function statement (invoice, plays) {
     volumeCredits += volumeCreditsFor(perf);
   }
 
-result += `Amount owed is ${usd(totalAmount)}\n`;
-result += `You earned ${volumeCredits} credits\n`;
-return result;
+  result += `Amount owed is ${usd(totalAmount)}\n`;
+  result += `You earned ${volumeCredits} credits\n`;
+  return result;
+}
 ```
 
 完成这一步，我就可以使用移动语句（223）手法将变量声明挪动到紧邻循环的位置。
@@ -764,6 +775,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${usd(totalAmount)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
+}
 ```
 
 把与更新 volumeCredits 变量相关的代码都集中到一起，有利于以查询取代临时变量（178）手法的施展。第一步同样是先对变量的计算过程应用提炼函数（106）手法。
@@ -796,6 +808,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${usd(totalAmount)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
+}
 ```
 
 完成函数提炼后，我再应用内联变量（123）手法内联 totalVolumeCredits 函数。
@@ -816,6 +829,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${usd(totalAmount)}\n`;
   result += `You earned ${totalVolumeCredits()} credits\n`;
   return result;
+}
 ```
 
 重构至此，让我先暂停一下，谈谈刚刚完成的修改。首先，我知道有些读者会再次对此修改可能带来的性能问题感到担忧，我知道很多人本能地警惕重复的循环。但大多数时候，重复一次这样的循环对性能的影响都可忽略不计。如果你在重构前后进行计时，很可能甚至都注意不到运行速度的变化——通常也确实没什么变化。许多程序员对代码实际的运行路径都所知不足，甚至经验丰富的程序员有时也未能避免。在聪明的编译器、现代的缓存技术面前，我们很多直觉都是不准确的。软件的性能通常只与代码的一小部分相关，改变其他的部分往往对总体性能贡献甚微。
@@ -860,6 +874,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${usd(totalAmount)}\n`;
   result += `You earned ${totalVolumeCredits()} credits\n`;
   return result;
+}
 ```
 
 接着我将变量内联（编译、测试、提交），然后将函数名改回 totalAmount（编译、测试、提交）。
@@ -875,6 +890,7 @@ function statement (invoice, plays) {
   result += `Amount owed is ${usd(totalAmount())}\n`;
   result += `You earned ${totalVolumeCredits()} credits\n`;
   return result;
+}
 ```
 
 #### function statement...
@@ -1006,6 +1022,7 @@ function totalAmount() {...}
   function volumeCreditsFor(aPerformance) {...}
   function playFor(aPerformance) {...}
   function amountFor(aPerformance) {...}
+}
 ```
 
 编译、测试、提交，接着创建一个对象，作为在两个阶段间传递的中转数据结构，然后将它作为第一个参数传递给 renderPlainText（然后编译、测试、提交）。
@@ -1025,12 +1042,14 @@ function renderPlainText(data, invoice, plays) {
   result += `You earned ${totalVolumeCredits()} credits\n`;
   return result;
 
-function totalAmount() {...}
+  function totalAmount() {...}
   function totalVolumeCredits() {...}
   function usd(aNumber) {...}
   function volumeCreditsFor(aPerformance) {...}
   function playFor(aPerformance) {...}
   function amountFor(aPerformance) {...}
+}
+
 ```
 
 现在我要检查一下 renderPlainText 用到的其他参数。我希望将它们挪到这个中转数据结构里，这样所有计算代码都可以被挪到 statement 函数中，让 renderPlainText 只操作通过 data 参数传进来的数据。
@@ -1052,6 +1071,7 @@ function renderPlainText(data, invoice, plays) {
   result += `Amount owed is ${usd(totalAmount())}\n`;
   result += `You earned ${totalVolumeCredits()} credits\n`;
   return result;
+}
 ```
 
 我将 performances 字段也搬移过去，这样我就可以移除掉 renderPlainText 的 invoice 参数（编译、测试、提交）。
@@ -1074,6 +1094,7 @@ function renderPlainText(data, plays) {
   result += `Amount owed is ${usd(totalAmount())}\n`;
   result += `You earned ${totalVolumeCredits()} credits\n`;
   return result;
+}
 ```
 
 #### function renderPlainText...
@@ -1107,6 +1128,7 @@ function statement (invoice, plays) {
   function enrichPerformance(aPerformance) {
     const result = Object.assign({}, aPerformance);
     return result;
+  }
 }
 ```
 
@@ -1303,6 +1325,7 @@ function createStatementData(invoice, plays) {
   statementData.totalAmount = totalAmount(statementData);
   statementData.totalVolumeCredits = totalVolumeCredits(statementData);
   return statementData;
+}
 ```
 
 由于两个阶段已经彻底分离，我干脆把它搬移到另一个文件里去（并且修改了返回结果的变量名，与我一贯的编码风格保持一致）。
@@ -1324,12 +1347,13 @@ result.totalAmount = totalAmount(result);
 result.totalVolumeCredits = totalVolumeCredits(result);
 return result;
 
-function enrichPerformance(aPerformance) {...}
+  function enrichPerformance(aPerformance) {...}
   function playFor(aPerformance) {...}
   function amountFor(aPerformance) {...}
   function volumeCreditsFor(aPerformance) {...}
   function totalAmount(data) {...}
   function totalVolumeCredits(data) {...}
+}
 ```
 
 最后再做一次编译、测试、提交，接下来，要编写一个 HTML 版本的对账单就很简单了。
@@ -1465,6 +1489,7 @@ createStatementData.js
     return data.performances
       .reduce((total, p) =&gt; total + p.volumeCredits, 0);
   }
+}
 ```
 
 代码行数由我开始重构时的 44 行增加到了 70 行（不算 htmlStatement），这主要是将代码抽取到函数里带来的额外包装成本。虽然代码的行数增加了，但重构也带来了代码可读性的提高。额外的包装将混杂的逻辑分解成可辨别的部分，分离了详单的计算逻辑与样式。这种模块化使我更容易辨别代码的不同部分，了解它们的协作关系。虽说言以简为贵，但可演化的软件却以明确为贵。通过增强代码的模块化，我可以轻易地添加 HTML 版本的代码，而无须重复计算部分的逻辑。
@@ -1540,6 +1565,7 @@ return data.performances
 function totalVolumeCredits(data) {
 return data.performances
     .reduce((total, p) =&gt; total + p.volumeCredits, 0);
+}
 }
 ```
 

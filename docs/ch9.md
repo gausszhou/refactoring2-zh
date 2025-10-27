@@ -497,11 +497,12 @@ get calculatedProductionAccumulator() {
 ```js
 class Product {
 applyDiscount(arg) {this._price.amount -= arg;}
-
+}
 
 class Product {
 applyDiscount(arg) {
   this._price = new Money(this._price.amount - arg, this._price.currency);
+}
 }
 ```
 
@@ -530,8 +531,7 @@ applyDiscount(arg) {
 #### class Person...
 
 ```js
-  constructor() {
-  constructor() {
+constructor() {
  this._telephoneNumber = new TelephoneNumber();
 }
 
@@ -544,7 +544,7 @@ set officeNumber(arg) {this._telephoneNumber.number = arg;}
 #### class TelephoneNumber...
 
 ```js
-  get areaCode()    {return this._areaCode;}
+get areaCode()    {return this._areaCode;}
 set areaCode(arg) {this._areaCode = arg;}
 
 get number()    {return this._number;}
