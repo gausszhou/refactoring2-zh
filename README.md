@@ -2,9 +2,7 @@
 
 《重构 改善既有代码的设计》第二版 中文翻译 [在线阅读](http://gausszhou.github.io/refactoring2-zh/)
 
-[MIT License](./LICENSE)
-
-<img src="./docs/cover.jpg" width="25%" />
+<img src="./docs/cover.jpg" alt="封面" width="25%" />
 
 ## 内容简介
 
@@ -51,9 +49,16 @@ ThoughtWorks 软件开发工程师，曾服务于国内外多家大型企业，�
 # 本地开发
 git clone https://github.com/gausszhou/refactoring2-zh.git
 cd refactoring2-zh/
-yarn 
-yarn dev
-
+npm i
+npm run dev
 # 本地阅读
 http://localhost:8080/refactoring-2zh/
 ```
+
+## License
+
+[MIT License](./LICENSE)
+
+## 感谢名单
+
+- [Certseeds](https://github.com/Certseeds)
