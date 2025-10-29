@@ -80,7 +80,7 @@ const organization = { name: "Acme Gooseberries", country: "GB" };
 这是一个普通的 JavaScript 对象，程序中很多地方都把它当作记录型结构在使用。以下是对其进行读取和更新的地方：
 
 ```js
-result += `&lt;h1&gt;${organization.name}&lt;/h1&gt;`;
+result += `<h1>${organization.name}</h1>`;
 organization.name = newName;
 ```
 
@@ -95,7 +95,7 @@ function getRawDataOfOrganization() {
 #### 读取的例子...
 
 ```js
-result += `&lt;h1&gt;${getRawDataOfOrganization().name}&lt;/h1&gt;`;
+result += `<h1>${getRawDataOfOrganization().name}</h1>`;
 ```
 
 #### 更新的例子...
@@ -159,7 +159,7 @@ get name() {return this._data.name;}
 #### 客户端...
 
 ```js
-result += `&lt;h1&gt;${getOrganization().name}&lt;/h1&gt;`;
+result += `<h1>${getOrganization().name}</h1>`;
 ```
 
 完成引用点的替换后，就可以兑现我之前的死亡威胁，为那个名称丑陋的函数送终了。
@@ -225,6 +225,7 @@ usages: {
 name: "neal",
 id: "38673",
 // more customers in a similar form
+}
 ```
 
 对嵌套数据的更新和读取可以进到更深的层级。
@@ -424,12 +425,13 @@ function compareUsage(customerID, laterYear, month) {
 class Person {
   get courses() {return this._courses;}
   set courses(aList) {this._courses = aList;}
-
+}
 
 class Person {
   get courses() {return this._courses.slice();}
   addCourse(aCourse) { ... }
   removeCourse(aCourse) { ... }
+}
 ```
 
 ### 动机
@@ -497,7 +499,7 @@ get isAdvanced() {return this._isAdvanced;}
 
 ```js
   numAdvancedCourses = aPerson.courses
-  .f ilter(c =&amp;gt; c.isAdvanced)
+  .f ilter(c => c.isAdvanced)
   .length
 ;
 ```
@@ -508,7 +510,7 @@ get isAdvanced() {return this._isAdvanced;}
 
 ```js
   const basicCourseNames = readBasicCourseNames(filename);
-aPerson.courses = basicCourseNames.map(name =&gt; new Course(name, false));
+aPerson.courses = basicCourseNames.map(name => new Course(name, false));
 ```
 
 但客户端也可能发现，直接更新课程列表显然更容易。
@@ -531,7 +533,7 @@ for (const name of readBasicCourseNames(filename)) {
   addCourse(aCourse) {
   this._courses.push(aCourse);
 }
-removeCourse(aCourse, fnIfAbsent = () =&gt; {throw new RangeError();}) {
+removeCourse(aCourse, fnIfAbsent = () => {throw new RangeError();}) {
   const index = this._courses.indexOf(aCourse);
   if (index === -1) fnIfAbsent();
   else this._courses.splice(index, 1);
@@ -575,11 +577,11 @@ get courses() {return this._courses.slice();}
 曾用名：以类取代类型码（Replace Type Code with Class）
 
 ```js
-  orders.filter(o =&gt; "high" === o.priority
+  orders.filter(o => "high" === o.priority
                || "rush" === o.priority);
 
 
-  orders.filter(o =&gt; o.priority.higherThan(new Priority("normal")))
+  orders.filter(o => o.priority.higherThan(new Priority("normal")))
 ```
 
 ### 动机
@@ -613,9 +615,10 @@ get courses() {return this._courses.slice();}
 #### class Order...
 
 ```js
-  constructor(data) {
+constructor(data) {
   this.priority = data.priority;
   // more initialization
+}
 ```
 
 客户端代码有些地方是这么用它的：
@@ -623,7 +626,7 @@ get courses() {return this._courses.slice();}
 #### 客户端...
 
 ```js
-  highPriorityCount = orders.filter(o =&gt; "high" === o.priority
+  highPriorityCount = orders.filter(o => "high" === o.priority
                                    || "rush" === o.priority)
                           .length;
 ```
@@ -677,7 +680,7 @@ set priority(aString) {this._priority = new Priority(aString);}
 #### 客户端...
 
 ```js
-  highPriorityCount = orders.filter(o =&gt; "high" === o.priorityString
+  highPriorityCount = orders.filter(o => "high" === o.priorityString
                                    || "rush" === o.priorityString)
                           .length;
 ```
@@ -697,7 +700,7 @@ set priority(aString) {this._priority = new Priority(aString);}
 #### 客户端...
 
 ```js
-  highPriorityCount = orders.filter(o =&gt; "high" === o.priority.toString()
+  highPriorityCount = orders.filter(o => "high" === o.priority.toString()
                                    || "rush" === o.priority.toString())
                           .length;
 ```
@@ -723,15 +726,15 @@ constructor(value) {
   if (Priority.legalValues().includes(value))
     this._value = value;
   else
-    throw new Error(`&lt;${value}&gt; is invalid for Priority`);
+    throw new Error(`<${value}> is invalid for Priority`);
 }
 toString() {return this._value;}
-get _index() {return Priority.legalValues().findIndex(s =&gt; s === this._value);}
+get _index() {return Priority.legalValues().findIndex(s => s === this._value);}
 static legalValues() {return ['low', 'normal', 'high', 'rush'];}
 
 equals(other) {return this._index === other._index;}
-higherThan(other) {return this._index &gt; other._index;}
-lowerThan(other) {return this._index &lt; other._index;}
+higherThan(other) {return this._index > other._index;}
+lowerThan(other) {return this._index < other._index;}
 ```
 
 修改的过程中，我发觉它实际上已经担负起值对象（value object）的角色，因此我又为它添加了一个 equals 方法，并确保它的值不可修改。
@@ -741,7 +744,7 @@ lowerThan(other) {return this._index &lt; other._index;}
 #### 客户端...
 
 ```js
-  highPriorityCount = orders.filter(o =&gt; o.priority.higherThan(new Priority("normal")))
+  highPriorityCount = orders.filter(o => o.priority.higherThan(new Priority("normal")))
                           .length;
 ```
 
@@ -749,7 +752,7 @@ lowerThan(other) {return this._index &lt; other._index;}
 
 ```js
   const basePrice = this._quantity * this._itemPrice;
-if (basePrice &gt; 1000)
+if (basePrice > 1000)
   return basePrice * 0.95;
 else
   return basePrice * 0.98;
@@ -759,7 +762,7 @@ else
 
 ...
 
-if (this.basePrice &gt; 1000)
+if (this.basePrice > 1000)
   return this.basePrice * 0.95;
 else
   return this.basePrice * 0.98;
@@ -802,7 +805,7 @@ else
 #### class Order...
 
 ```js
-    constructor(quantity, item) {
+  constructor(quantity, item) {
     this._quantity = quantity;
     this._item = item;
   }
@@ -810,10 +813,9 @@ else
 get price() {
     var basePrice = this._quantity * this._item.price;
     var discountFactor = 0.98;
-    if (basePrice &gt; 1000) discountFactor -= 0.03;
+    if (basePrice > 1000) discountFactor -= 0.03;
     return basePrice * discountFactor;
   }
-}
 ```
 
 我希望把 basePrice 和 discountFactor 两个临时变量变成函数。
@@ -823,7 +825,7 @@ get price() {
 #### class Order...
 
 ```js
-   constructor(quantity, item) {
+ constructor(quantity, item) {
   this._quantity = quantity;
   this._item = item;
  }
@@ -831,10 +833,9 @@ get price() {
  get price() {
   const basePrice = this._quantity * this._item.price;
   var discountFactor = 0.98;
-  if (basePrice &gt; 1000) discountFactor -= 0.03;
+  if (basePrice > 1000) discountFactor -= 0.03;
   return basePrice * discountFactor;
  }
-}
 ```
 
 然后我把赋值操作的右边提炼成一个取值函数。
@@ -845,7 +846,7 @@ get price() {
 get price() {
  const basePrice = this.basePrice;
  var discountFactor = 0.98;
- if (basePrice &gt; 1000) discountFactor -= 0.03;
+ if (basePrice > 1000) discountFactor -= 0.03;
  return basePrice * discountFactor;
 }
 
@@ -862,7 +863,7 @@ get price() {
 get price() {
  const basePrice = this.basePrice;
  var discountFactor = 0.98;
- if (this.basePrice &gt; 1000) discountFactor -= 0.03;
+ if (this.basePrice > 1000) discountFactor -= 0.03;
  return this.basePrice * discountFactor;
 }
 ```
@@ -879,7 +880,7 @@ get price() {
 
  get discountFactor() {
   var discountFactor = 0.98;
-  if (this.basePrice &gt; 1000) discountFactor -= 0.03;
+  if (this.basePrice > 1000) discountFactor -= 0.03;
   return discountFactor;
 }
 ```
@@ -899,12 +900,12 @@ get price() {
 反向重构：内联类（186）
 
 ```js
-  class Person {
+class Person {
  get officeAreaCode() {return this._officeAreaCode;}
  get officeNumber()   {return this._officeNumber;}
+}
 
-
-  class Person {
+class Person {
  get officeAreaCode() {return this._telephoneNumber.areaCode;}
  get officeNumber()   {return this._telephoneNumber.number;}
 }
@@ -1060,7 +1061,7 @@ get telephoneNumber() {return this._telephoneNumber.toString();}
 反向重构：提炼类（182）
 
 ```js
-  class Person {
+class Person {
  get officeAreaCode() {return this._telephoneNumber.areaCode;}
  get officeNumber()  {return this._telephoneNumber.number;}
 }
@@ -1069,10 +1070,10 @@ class TelephoneNumber {
  get number() {return this._number;}
 }
 
-
-  class Person {
+class Person {
  get officeAreaCode() {return this._officeAreaCode;}
  get officeNumber()  {return this._officeNumber;}
+}
 ```
 
 ### 动机
@@ -1200,6 +1201,7 @@ set trackingNumber(arg) {this._trackingNumber = arg;}
 
 class Person {
   get manager() {return this.department.manager;}
+}
 ```
 
 ### 动机
@@ -1279,9 +1281,11 @@ manager = aPerson.department.manager;
 
 class Person {
  get manager() {return this.department.manager;}
+}
+```
 
-
-  manager = aPerson.department.manager;
+``` js
+ manager = aPerson.department.manager;
 ```
 
 ### 动机
@@ -1358,7 +1362,7 @@ get manager() {return this.department.manager;}
 
 ```js
   function foundPerson(people) {
- for(let i = 0; i &lt; people.length; i++) {
+ for(let i = 0; i < people.length; i++) {
   if (people[i] === "Don") {
    return "Don";
   }
@@ -1375,7 +1379,7 @@ get manager() {return this.department.manager;}
 
   function foundPerson(people) {
  const candidates = ["Don", "John", "Kent"];
- return people.find(p =&gt; candidates.includes(p)) || '';
+ return people.find(p => candidates.includes(p)) || '';
 }
 ```
 

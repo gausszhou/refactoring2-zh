@@ -59,7 +59,7 @@ constructor(doc) {
  this._totalProduction = 0;
  this._demand = doc.demand;
  this._price = doc.price;
- doc.producers.forEach(d =&gt; this.addProducer(new Producer(this, d)));
+ doc.producers.forEach(d => this.addProducer(new Producer(this, d)));
 }
 addProducer(arg) {
  this._producers.push(arg);
@@ -151,8 +151,8 @@ get demandCost() {
  let remainingDemand = this.demand;
  let result = 0;
  this.producers
-  .sort((a,b) =&gt; a.cost - b.cost)
-  .forEach(p =&gt; {
+  .sort((a,b) => a.cost - b.cost)
+  .forEach(p => {
    const contribution = Math.min(remainingDemand, p.production);
     remainingDemand -= contribution;
     result += contribution * p.cost;
@@ -222,7 +222,7 @@ get shortfall() {
 
 1) province shortfall:
 AssertionError: expected -20 to equal 5
-at Context.&lt;anonymous&gt; (src/tester.js:10:12)
+at Context.<anonymous> (src/tester.js:10:12)
 ```
 
 框架会报告哪个测试失败了，并给出失败的根本原因——这里是因为实际算出的值与期望的值不相符。于是我总算见到有什么东西失败了，并且还能马上看到是哪个测试失败，获得一些出错的线索（这个例子中，我还能确认这就是我引入的那个错误）。
@@ -337,7 +337,7 @@ describe('province'...
   asia.producers[0].production = 20;
   expect(asia.shortfall).equal(-6);
   expect(asia.profit).equal(292);
-});
+}));
 ```
 
 这是一个常见的测试模式。我拿到 beforeEach 配置好的初始标准夹具，然后对该夹具进行必要的检查，最后验证它是否表现出我期望的行为。如果你读过测试相关的资料，就会经常听到各种类似的术语，比如配置-检查-验证（setup-exercise-verify）、given-when-then 或者准备-行为-断言（arrange-act-assert）等。有时你能在一个测试里见到所有的步骤，有时那些早期的公用阶段会被提到一些标准的配置步骤里，诸如 beforeEach 等。
@@ -372,6 +372,7 @@ describe('no producers', function() {
  it('profit', function() {
   expect(noProducers.profit).equal(0);
  });
+});
 ```
 
 如果拿到的是数值类型，0 会是不错的边界条件：
@@ -382,7 +383,7 @@ describe('province'...
  asia.demand = 0;
   expect(asia.shortfall).equal(-25);
   expect(asia.profit).equal(0);
- });
+ }));
 ```
 
 负值同样值得一试：
@@ -393,7 +394,7 @@ describe('province'...
  asia.demand = -1;
  expect(asia.shortfall).equal(-26);
  expect(asia.profit).equal(-10);
-});
+}));
 ```
 
 测试到这里，我不禁有一个想法：对于这个业务领域来讲，提供一个负的需求值，并算出一个负的利润值意义何在？最小的需求量不应该是 0 吗？或许，设值方法需要对负值有些不同的行为，比如抛出错误，或总是将值设置为 0。这些问题都很好，编写这样的测试能帮助我思考代码本应如何应对边界场景。
@@ -410,7 +411,7 @@ describe('province'...
  asia.demand = "";
  expect(asia.shortfall).NaN;
  expect(asia.profit).NaN;
-});
+}));
 ```
 
 可以看到，我在这里扮演“程序公敌”的角色。我积极思考如何破坏代码。我发现这种思维能够提高生产力，并且很有趣——它纵容了我内心中比较促狭的那一部分。
@@ -429,6 +430,7 @@ describe('string for producers', function() {
   const prov = new Province(data);
   expect(prov.shortfall).equal(0);
  });
+});
 ```
 
 它并不是抛出一个简单的错误说缺额的值不为 0。控制台的报错输出实际如下：
@@ -442,7 +444,7 @@ describe('string for producers', function() {
 1) string for producers :
   TypeError: doc.producers.forEach is not a function
   at new Province (src/main.js:22:19)
-  at Context.&lt;anonymous&gt; (src/tester.js:86:18)
+  at Context.<anonymous> (src/tester.js:86:18)
 ```
 
 Mocha 把这也当作测试失败（failure），但多数测试框架会把它当作一个错误（error），并与正常的测试失败区分开。“失败”指的是在验证阶段中，实际值与验证语句提供的期望值不相等；而这里的“错误”则是另一码事，它是在更早的阶段前抛出的异常（这里是在配置阶段）。它更像代码的作者没有预料到的一种异常场景，因此我们不幸地得到了每个 JavaScript 程序员都很熟悉的错误（“...is not a function”）。
